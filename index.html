@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prép'Concours CI 2026 — Fonction Publique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #00C851;
+  --green-dark: #009e3e;
+  --green-glow: rgba(0,200,81,0.18);
+  --orange: #FF6B35;
+  --gold: #F5C518;
+  --navy: #0B1426;
+  --navy2: #111d35;
+  --navy3: #1a2a4a;
+  --card: #131f38;
+  --card2: #1a2a4a;
+  --text: #e8edf7;
+  --muted: #7a90b8;
+  --border: rgba(255,255,255,0.07);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── BG GRID ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,200,81,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,81,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none; z-index: 0;
+}
+
+/* ── SIDEBAR ── */
+#sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: 240px;
+  background: var(--navy2);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  z-index: 100;
+  padding: 28px 0 20px;
+}
+
+.sidebar-logo {
+  padding: 0 20px 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-logo .badge {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px; font-weight: 800;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--green);
+  background: var(--green-glow);
+  border: 1px solid var(--green);
+  border-radius: 4px; padding: 3px 8px;
+  display: inline-block; margin-bottom: 8px;
+}
+
+.sidebar-logo h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 17px; font-weight: 800;
+  line-height: 1.2; color: #fff;
+}
+
+.sidebar-logo h1 span { color: var(--green); }
+
+.sidebar-nav { flex: 1; padding: 16px 0; overflow-y: auto; }
+
+.nav-section {
+  font-size: 10px; font-weight: 600; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--muted);
+  padding: 12px 20px 6px;
+}
+
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 0;
+  font-size: 13.5px; font-weight: 400;
+  color: var(--muted);
+  transition: all 0.2s;
+  position: relative;
+}
+
+.nav-item:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+.nav-item.active {
+  color: var(--green); font-weight: 500;
+  background: var(--green-glow);
+}
+.nav-item.active::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: var(--green); border-radius: 0 3px 3px 0;
+}
+
+.nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  font-size: 11px; color: var(--muted);
+}
+
+.deadline-badge {
+  background: rgba(255,107,53,0.15);
+  border: 1px solid var(--orange);
+  border-radius: 8px; padding: 8px 12px;
+  color: var(--orange); font-size: 12px;
+  font-weight: 500;
+}
+.deadline-badge strong { display: block; font-size: 11px; opacity: 0.8; margin-bottom: 2px; }
+
+/* ── MAIN ── */
+#main {
+  margin-left: 240px;
+  min-height: 100vh;
+  position: relative; z-index: 1;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  padding: 20px 32px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(11,20,38,0.8); backdrop-filter: blur(10px);
+  position: sticky; top: 0; z-index: 50;
+}
+.topbar-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px; font-weight: 700; color: #fff;
+}
+.topbar-title span { color: var(--green); }
+
+.progress-pill {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 30px; padding: 6px 14px; font-size: 12px;
+}
+.progress-pill .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+
+/* ── CONTENT ── */
+.content { padding: 32px; }
+.page { display: none; }
+.page.active { display: block; animation: fadeIn 0.3s ease; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── CARDS ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.card-header {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px; font-weight: 700;
+  margin-bottom: 16px; color: #fff;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* ── GRID LAYOUTS ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+
+/* ── STAT CARDS ── */
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  position: relative; overflow: hidden;
+}
+.stat-card::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--accent, var(--green));
+}
+.stat-card .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.stat-card .stat-value { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: #fff; }
+.stat-card .stat-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+/* ── SECTION TITLE ── */
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px; font-weight: 800; color: #fff;
+  margin-bottom: 6px;
+}
+.section-sub { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+
+/* ── CHECKLIST ── */
+.checklist-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 16px;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 10px;
+  cursor: pointer; transition: all 0.2s;
+}
+.checklist-item:hover { border-color: rgba(0,200,81,0.3); }
+.checklist-item.checked { background: rgba(0,200,81,0.06); border-color: rgba(0,200,81,0.25); }
+
+.check-box {
+  width: 22px; height: 22px; flex-shrink: 0;
+  border: 2px solid var(--muted);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; margin-top: 1px;
+}
+.checklist-item.checked .check-box {
+  background: var(--green); border-color: var(--green); color: #000;
+}
+
+.check-label { flex: 1; }
+.check-label strong { display: block; font-size: 14px; font-weight: 500; }
+.check-label small { color: var(--muted); font-size: 12px; }
+.check-label .tag {
+  display: inline-block; font-size: 10px; padding: 2px 7px;
+  border-radius: 4px; margin-top: 4px; font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.tag-required { background: rgba(245,197,24,0.15); color: var(--gold); border: 1px solid rgba(245,197,24,0.3); }
+.tag-optional { background: rgba(122,144,184,0.15); color: var(--muted); border: 1px solid var(--border); }
+.tag-admission { background: rgba(255,107,53,0.15); color: var(--orange); border: 1px solid rgba(255,107,53,0.3); }
+
+/* ── PROGRESS BAR ── */
+.prog-bar { background: rgba(255,255,255,0.08); border-radius: 10px; height: 8px; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 10px; background: var(--green); transition: width 0.5s ease; }
+.prog-fill.orange { background: var(--orange); }
+.prog-fill.gold { background: var(--gold); }
+
+/* ── QUIZ ── */
+.quiz-container { max-width: 720px; }
+.quiz-header { margin-bottom: 24px; }
+.quiz-question {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 16px;
+}
+.quiz-q-text {
+  font-size: 16px; font-weight: 500; line-height: 1.6;
+  color: #fff; margin-bottom: 6px;
+}
+.quiz-category {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--green); font-weight: 600; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.quiz-options { display: flex; flex-direction: column; gap: 10px; }
+.quiz-option {
+  padding: 13px 18px;
+  background: var(--card2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer; font-size: 14px;
+  transition: all 0.2s;
+  display: flex; align-items: center; gap: 12px;
+}
+.quiz-option:hover:not(.disabled) { border-color: rgba(0,200,81,0.4); background: rgba(0,200,81,0.05); }
+.quiz-option.correct { border-color: var(--green); background: rgba(0,200,81,0.1); color: var(--green); }
+.quiz-option.wrong { border-color: var(--orange); background: rgba(255,107,53,0.1); color: var(--orange); }
+.quiz-option.disabled { cursor: default; }
+
+.option-letter {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; flex-shrink: 0;
+}
+
+.quiz-feedback {
+  padding: 16px 20px;
+  border-radius: var(--radius-sm);
+  margin-top: 12px; font-size: 14px; line-height: 1.6;
+  display: none;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.success { background: rgba(0,200,81,0.1); border: 1px solid rgba(0,200,81,0.3); color: var(--green); }
+.quiz-feedback.error { background: rgba(255,107,53,0.1); border: 1px solid rgba(255,107,53,0.3); color: var(--orange); }
+
+.btn {
+  padding: 11px 22px; border-radius: 10px;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+  cursor: pointer; border: none; transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-primary { background: var(--green); color: #000; font-weight: 600; }
+.btn-primary:hover { background: var(--green-dark); transform: translateY(-1px); }
+.btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-outline:hover { border-color: var(--green); color: var(--green); }
+.btn-sm { padding: 7px 14px; font-size: 12px; border-radius: 7px; }
+
+/* ── EXERCISE (Mise au net) ── */
+.exercise-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px; line-height: 1.9;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  margin-bottom: 16px; color: var(--orange);
+  font-style: italic;
+}
+.exercise-input {
+  width: 100%;
+  background: var(--card2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
+  line-height: 1.8; resize: vertical; min-height: 120px;
+  transition: border-color 0.2s; outline: none;
+}
+.exercise-input:focus { border-color: var(--green); }
+.correction-box {
+  background: rgba(0,200,81,0.06);
+  border: 1px solid rgba(0,200,81,0.3);
+  border-radius: var(--radius-sm); padding: 16px 20px;
+  margin-top: 12px; display: none;
+}
+.correction-box.show { display: block; }
+.correction-box .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--green); font-weight: 700; margin-bottom: 8px; }
+.correction-box .correct-text { font-size: 14px; line-height: 1.8; color: #b8ffd4; }
+.correction-box .explication { margin-top: 10px; font-size: 13px; color: var(--muted); line-height: 1.6; }
+.correction-box .explication strong { color: var(--gold); }
+
+/* ── LOGIC SUITE ── */
+.logic-series {
+  display: flex; align-items: center; gap: 12px;
+  flex-wrap: wrap; margin: 16px 0;
+}
+.logic-item {
+  width: 52px; height: 52px;
+  background: var(--card2); border: 1.5px solid var(--border);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700;
+  color: #fff;
+}
+.logic-item.unknown {
+  background: rgba(0,200,81,0.05); border: 2px dashed var(--green);
+  color: var(--green);
+}
+.logic-answer-input {
+  width: 70px; height: 52px; text-align: center;
+  background: var(--navy3); border: 2px solid var(--green);
+  border-radius: 10px; color: var(--green);
+  font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700;
+  outline: none;
+}
+
+/* ── TIMELINE PROGRESS ── */
+.timeline { position: relative; padding-left: 24px; }
+.timeline::before {
+  content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px;
+  width: 2px; background: var(--border);
+}
+.timeline-item { position: relative; padding: 0 0 20px 20px; }
+.timeline-item::before {
+  content: ''; position: absolute; left: -18px; top: 6px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--muted); border: 2px solid var(--navy2);
+}
+.timeline-item.done::before { background: var(--green); box-shadow: 0 0 0 4px var(--green-glow); }
+.timeline-item.current::before { background: var(--gold); box-shadow: 0 0 0 4px rgba(245,197,24,0.2); animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100% { box-shadow: 0 0 0 4px rgba(245,197,24,0.2); } 50% { box-shadow: 0 0 0 8px rgba(245,197,24,0.05); } }
+
+.timeline-title { font-size: 14px; font-weight: 600; color: #fff; }
+.timeline-date { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.timeline-note { font-size: 12px; color: var(--text); margin-top: 6px; background: var(--card2); border-radius: 6px; padding: 8px 12px; }
+
+/* ── SCORE RING ── */
+.score-ring-wrap { display: flex; align-items: center; gap: 20px; }
+.score-ring { position: relative; width: 90px; height: 90px; }
+.score-ring svg { transform: rotate(-90deg); }
+.score-ring .score-text {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.score-ring .score-text span { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: #fff; }
+.score-ring .score-text small { font-size: 10px; color: var(--muted); }
+
+/* ── TABS ── */
+.tabs { display: flex; gap: 4px; margin-bottom: 20px; background: var(--card); border-radius: 10px; padding: 4px; width: fit-content; }
+.tab {
+  padding: 8px 18px; border-radius: 7px; cursor: pointer;
+  font-size: 13px; font-weight: 500; color: var(--muted); transition: all 0.2s;
+}
+.tab.active { background: var(--green); color: #000; font-weight: 600; }
+
+/* ── CONCOURS TABLE ── */
+.concours-table { width: 100%; border-collapse: collapse; }
+.concours-table th {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+  color: var(--muted); font-weight: 600; text-align: left;
+  padding: 10px 16px; border-bottom: 1px solid var(--border);
+}
+.concours-table td { padding: 13px 16px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.concours-table tr:hover td { background: rgba(255,255,255,0.02); }
+.grade-badge {
+  display: inline-block; padding: 3px 9px; border-radius: 5px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+}
+.grade-c1 { background: rgba(0,200,81,0.15); color: var(--green); border: 1px solid rgba(0,200,81,0.3); }
+.grade-d1 { background: rgba(122,144,184,0.15); color: var(--muted); border: 1px solid var(--border); }
+.grade-c3 { background: rgba(245,197,24,0.15); color: var(--gold); border: 1px solid rgba(245,197,24,0.3); }
+
+/* ── FLASHCARD ── */
+.flashcard-wrap { perspective: 1000px; }
+.flashcard {
+  width: 100%; min-height: 200px; position: relative;
+  transform-style: preserve-3d; transition: transform 0.6s;
+  cursor: pointer;
+}
+.flashcard.flipped { transform: rotateY(180deg); }
+.flashcard-face {
+  position: absolute; inset: 0;
+  backface-visibility: hidden;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center;
+}
+.flashcard-back { transform: rotateY(180deg); background: var(--card2); border-color: rgba(0,200,81,0.3); }
+.flashcard-face .card-type { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--green); font-weight: 700; margin-bottom: 12px; }
+.flashcard-face .card-content { font-size: 17px; line-height: 1.6; color: #fff; }
+.flashcard-back .card-content { color: #b8ffd4; font-size: 15px; }
+
+/* ── NOTIFICATION ── */
+.notif {
+  position: fixed; top: 20px; right: 20px; z-index: 9999;
+  background: var(--green); color: #000;
+  padding: 12px 20px; border-radius: 10px;
+  font-size: 14px; font-weight: 600;
+  transform: translateX(200%); transition: transform 0.4s ease;
+  display: flex; align-items: center; gap: 8px;
+}
+.notif.show { transform: translateX(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  #sidebar { width: 60px; }
+  .nav-item span, .sidebar-logo h1, .sidebar-logo .badge, .nav-section, .sidebar-footer { display: none; }
+  #main { margin-left: 60px; }
+  .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  #sidebar { display: none; }
+  #main { margin-left: 0; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .content { padding: 16px; }
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ── FOCUS STATE ── */
+.quiz-option:focus { outline: 2px solid var(--green); outline-offset: 2px; }
+
+.divider { height: 1px; background: var(--border); margin: 20px 0; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.mb-8 { margin-bottom: 8px; }
+
+.highlight-text { color: var(--green); font-weight: 600; }
+.text-muted { color: var(--muted); font-size: 13px; }
+
+/* ── HERO BANNER ── */
+.hero-banner {
+  background: linear-gradient(135deg, rgba(0,200,81,0.12) 0%, rgba(0,50,20,0.3) 100%);
+  border: 1px solid rgba(0,200,81,0.2);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  margin-bottom: 24px;
+  position: relative; overflow: hidden;
+}
+.hero-banner::after {
+  content: '🏛️';
+  position: absolute; right: 24px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 64px; opacity: 0.15;
+}
+
+/* Exam question counter */
+.q-counter {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.q-nav { display: flex; gap: 6px; flex-wrap: wrap; }
+.q-dot {
+  width: 28px; height: 28px; border-radius: 6px;
+  background: var(--card2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+}
+.q-dot:hover { border-color: var(--green); }
+.q-dot.answered { background: rgba(0,200,81,0.15); border-color: var(--green); color: var(--green); }
+.q-dot.current { background: var(--green); color: #000; border-color: var(--green); }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="badge">CI 2026</div>
+    <h1>Prép'<span>Concours</span></h1>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-section">Navigation</div>
+    <div class="nav-item active" onclick="showPage('dashboard')">
+      <span class="icon">📊</span><span>Tableau de bord</span>
+    </div>
+    <div class="nav-item" onclick="showPage('infos')">
+      <span class="icon">📋</span><span>Infos & Concours</span>
+    </div>
+    <div class="nav-item" onclick="showPage('dossier')">
+      <span class="icon">📁</span><span>Mon Dossier</span>
+    </div>
+    <div class="nav-section">Formation</div>
+    <div class="nav-item" onclick="showPage('miseau')">
+      <span class="icon">✍️</span><span>Mise au Net</span>
+    </div>
+    <div class="nav-item" onclick="showPage('logique')">
+      <span class="icon">🧩</span><span>Logique & Suites</span>
+    </div>
+    <div class="nav-item" onclick="showPage('opaj')">
+      <span class="icon">⚖️</span><span>OPAJ</span>
+    </div>
+    <div class="nav-item" onclick="showPage('flashcards')">
+      <span class="icon">🃏</span><span>Flashcards</span>
+    </div>
+    <div class="nav-section">Outils</div>
+    <div class="nav-item" onclick="showPage('timer')">
+      <span class="icon">⏱️</span><span>Chronomètre</span>
+    </div>
+    <div class="nav-item" onclick="showPage('stats')">
+      <span class="icon">📈</span><span>Mes Stats</span>
+    </div>
+  </div>
+  <div class="sidebar-footer">
+    <div class="deadline-badge">
+      <strong>⚠️ Date limite</strong>
+      30 Avril 2026
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">Tableau de <span>bord</span></div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="progress-pill">
+        <div class="dot"></div>
+        <span id="global-progress-text">Progression : 0%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ═══ DASHBOARD ═══ -->
+    <div class="page active" id="page-dashboard">
+      <div class="hero-banner">
+        <div style="max-width:500px;">
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--green);font-weight:700;margin-bottom:8px;">Adjoint Administratif · Grade C1</div>
+          <div class="section-title" style="margin-bottom:6px;">Bienvenue dans ta préparation 🎯</div>
+          <p style="color:var(--muted);font-size:14px;line-height:1.6;">Concours Fonction Publique Côte d'Ivoire — Session 2026. Inscriptions via <strong style="color:var(--text);">GUCACI</strong> avant le <strong style="color:var(--orange);">30 Avril 2026</strong>.</p>
+          <div style="margin-top:16px;display:flex;gap:10px;">
+            <button class="btn btn-primary btn-sm" onclick="showPage('miseau')">✍️ S'entraîner</button>
+            <button class="btn btn-outline btn-sm" onclick="showPage('dossier')">📁 Mon dossier</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-4" style="margin-bottom:24px;">
+        <div class="stat-card" style="--accent:var(--green);">
+          <div class="stat-label">Exercices réalisés</div>
+          <div class="stat-value" id="stat-ex">0</div>
+          <div class="stat-sub">sur toutes matières</div>
+        </div>
+        <div class="stat-card" style="--accent:var(--gold);">
+          <div class="stat-label">Bonnes réponses</div>
+          <div class="stat-value" id="stat-correct">0%</div>
+          <div class="stat-sub">taux de réussite</div>
+        </div>
+        <div class="stat-card" style="--accent:var(--orange);">
+          <div class="stat-label">Dossier complété</div>
+          <div class="stat-value" id="stat-dossier">0%</div>
+          <div class="stat-sub">pièces préparées</div>
+        </div>
+        <div class="stat-card" style="--accent:#a78bfa;">
+          <div class="stat-label">Jours restants</div>
+          <div class="stat-value" id="stat-days">—</div>
+          <div class="stat-sub">avant le 30 Avril</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:24px;">
+        <div class="card">
+          <div class="card-header">📅 Calendrier clé</div>
+          <div class="timeline">
+            <div class="timeline-item done">
+              <div class="timeline-title">Ouverture des inscriptions</div>
+              <div class="timeline-date">Déjà ouvert</div>
+              <div class="timeline-note">Plateforme GUCACI disponible</div>
+            </div>
+            <div class="timeline-item current">
+              <div class="timeline-title">⚡ Inscription en ligne + Paiement</div>
+              <div class="timeline-date">Avant le 30 Avril 2026</div>
+              <div class="timeline-note">23 500 F CFA via Mobile Money · Documents scannés requis</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-title">Prise de vue numérique</div>
+              <div class="timeline-date">Rendez-vous à prendre</div>
+              <div class="timeline-note">Après inscription en ligne</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-title">Épreuves écrites</div>
+              <div class="timeline-date">Date à confirmer</div>
+              <div class="timeline-note">Mise au Net · Logique · OPAJ</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-title">Résultats admissibilité</div>
+              <div class="timeline-date">Après les épreuves</div>
+              <div class="timeline-note">Dossier physique complet exigé si admis</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">📚 Progression par matière</div>
+          <div style="display:flex;flex-direction:column;gap:20px;margin-top:8px;">
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:13px;font-weight:500;">✍️ Mise au Net</span>
+                <span style="font-size:12px;color:var(--muted);" id="prog-miseau-text">0 exercices</span>
+              </div>
+              <div class="prog-bar"><div class="prog-fill" id="prog-miseau" style="width:0%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:13px;font-weight:500;">🧩 Logique & Suites</span>
+                <span style="font-size:12px;color:var(--muted);" id="prog-logique-text">0 exercices</span>
+              </div>
+              <div class="prog-bar"><div class="prog-fill orange" id="prog-logique" style="width:0%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:13px;font-weight:500;">⚖️ OPAJ</span>
+                <span style="font-size:12px;color:var(--muted);" id="prog-opaj-text">0 exercices</span>
+              </div>
+              <div class="prog-bar"><div class="prog-fill gold" id="prog-opaj" style="width:0%"></div></div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div style="text-align:center;">
+            <button class="btn btn-primary" onclick="showPage('opaj')">Commencer une session →</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">💡 Conseils du jour</div>
+        <div class="grid-3">
+          <div style="padding:16px;background:var(--card2);border-radius:10px;border:1px solid var(--border);">
+            <div style="font-size:24px;margin-bottom:8px;">✍️</div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:4px;">Mise au Net</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.6;">Entraîne-toi à recopier des textes proprement. Fais attention aux accords (pluriels, conjugaisons) et à l'écriture lisible. 30 min/jour suffit.</div>
+          </div>
+          <div style="padding:16px;background:var(--card2);border-radius:10px;border:1px solid var(--border);">
+            <div style="font-size:24px;margin-bottom:8px;">🧩</div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:4px;">Logique</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.6;">Cherche toujours la règle : ×2, +n, alternance… Entraîne-toi à trouver la règle vite. La rapidité est clé dans les tests psychotechniques.</div>
+          </div>
+          <div style="padding:16px;background:var(--card2);border-radius:10px;border:1px solid var(--border);">
+            <div style="font-size:24px;margin-bottom:8px;">⚖️</div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:4px;">OPAJ</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.6;">Mémorise les institutions, leurs rôles et composition. Utilise les flashcards pour les noms, dates et articles de la Constitution.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ INFOS & CONCOURS ═══ -->
+    <div class="page" id="page-infos">
+      <div class="section-title">📋 Informations officielles</div>
+      <div class="section-sub">Tout ce qu'il faut savoir sur le concours 2026</div>
+
+      <div class="grid-2" style="margin-bottom:24px;">
+        <div class="card">
+          <div class="card-header">🏛️ Conditions de candidature</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--card2);border-radius:8px;">
+              <span style="font-size:20px;">🇨🇮</span>
+              <div><strong style="font-size:13px;">Nationalité ivoirienne</strong><br><small style="color:var(--muted);">obligatoire</small></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--card2);border-radius:8px;">
+              <span style="font-size:20px;">🎂</span>
+              <div><strong style="font-size:13px;">Âge : 18 à 40 ans</strong><br><small style="color:var(--muted);">au 31 décembre 2025</small></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--card2);border-radius:8px;">
+              <span style="font-size:20px;">🏥</span>
+              <div><strong style="font-size:13px;">Couverture Maladie Universelle (CMU)</strong><br><small style="color:var(--muted);">preuve d'enrôlement obligatoire</small></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.2);border-radius:8px;">
+              <span style="font-size:20px;">💰</span>
+              <div><strong style="font-size:13px;color:var(--orange);">23 500 F CFA</strong><br><small style="color:var(--muted);">paiement Mobile Money uniquement</small></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">🎓 Épreuves — Adjoint Administratif C1</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="padding:16px;background:var(--card2);border-radius:10px;border-left:3px solid var(--green);">
+              <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:4px;">📝 Mise au Net (Français)</div>
+              <div style="font-size:12px;color:var(--muted);line-height:1.6;">Recopier un texte brouillon contenant des fautes d'orthographe et de grammaire, en les corrigeant toutes. Écriture soignée et présentation impeccable exigées.</div>
+            </div>
+            <div style="padding:16px;background:var(--card2);border-radius:10px;border-left:3px solid var(--orange);">
+              <div style="font-size:13px;font-weight:700;color:var(--orange);margin-bottom:4px;">🧩 Logique (Tests psychotechniques)</div>
+              <div style="font-size:12px;color:var(--muted);line-height:1.6;">Exercices de rapidité intellectuelle : suites numériques, de lettres, de formes géométriques. Rapidité et précision sont les critères clés.</div>
+            </div>
+            <div style="padding:16px;background:var(--card2);border-radius:10px;border-left:3px solid var(--gold);">
+              <div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:4px;">⚖️ OPAJ (Culture générale)</div>
+              <div style="font-size:12px;color:var(--muted);line-height:1.6;">Organisation Politique, Administrative et Judiciaire de la Côte d'Ivoire. Institutions, Constitution, pouvoir exécutif/législatif/judiciaire.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:24px;">
+        <div class="card-header">📑 Liste des concours ouverts (BEPC/CEPE)</div>
+        <table class="concours-table">
+          <thead>
+            <tr>
+              <th>Intitulé du Concours</th>
+              <th>Grade</th>
+              <th>Niveau requis</th>
+              <th>Épreuves</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Adjoint Administratif</strong> ⭐</td>
+              <td><span class="grade-badge grade-c1">C1</span></td>
+              <td>BEPC</td>
+              <td style="color:var(--muted);font-size:12px;">Mise au Net · Logique · OPAJ</td>
+            </tr>
+            <tr>
+              <td>Agent de Bureau</td>
+              <td><span class="grade-badge grade-d1">D1</span></td>
+              <td>CEPE</td>
+              <td style="color:var(--muted);font-size:12px;">Dictée · Calcul · Culture G.</td>
+            </tr>
+            <tr>
+              <td>Agent Servant</td>
+              <td><span class="grade-badge grade-c3">C3</span></td>
+              <td>BEPC</td>
+              <td style="color:var(--muted);font-size:12px;">Épreuves pratiques</td>
+            </tr>
+            <tr>
+              <td>Auxiliaire Social</td>
+              <td><span class="grade-badge grade-d1">D1</span></td>
+              <td>CEPE</td>
+              <td style="color:var(--muted);font-size:12px;">Culture générale</td>
+            </tr>
+            <tr>
+              <td>Garde de Sous-Préfecture</td>
+              <td><span class="grade-badge grade-d1">D1</span></td>
+              <td>CEPE</td>
+              <td style="color:var(--muted);font-size:12px;">Épreuves physiques + écrites</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-header">🌐 Lien officiel</div>
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <div style="flex:1;">
+            <div style="font-size:14px;margin-bottom:4px;color:var(--text);">Guichet Unique des Concours Administratifs de Côte d'Ivoire</div>
+            <div style="font-size:13px;color:var(--green);font-weight:600;">gucaci.ci</div>
+          </div>
+          <a href="https://gucaci.ci" target="_blank" class="btn btn-primary btn-sm">🔗 Ouvrir GUCACI</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ DOSSIER ═══ -->
+    <div class="page" id="page-dossier">
+      <div class="section-title">📁 Mon Dossier de Candidature</div>
+      <div class="section-sub">Coche chaque pièce au fur et à mesure que tu la prépares</div>
+
+      <div class="grid-2" style="margin-bottom:24px;">
+        <div>
+          <div class="card mb-8" style="margin-bottom:16px;">
+            <div class="card-header">📤 Documents pour l'inscription en ligne</div>
+            <p style="font-size:12px;color:var(--muted);margin-bottom:16px;">⚡ Requis AVANT le 30 Avril — Format numérique : PDF, JPG ou PNG</p>
+            <div id="checklist-online"></div>
+          </div>
+          <div class="card">
+            <div class="card-header">💳 Frais & Paiement</div>
+            <div id="checklist-payment"></div>
+          </div>
+        </div>
+        <div>
+          <div class="card mb-8" style="margin-bottom:16px;">
+            <div class="card-header">📂 Dossier physique (si admis aux écrits)</div>
+            <p style="font-size:12px;color:var(--orange);margin-bottom:16px;">⚠️ Exigé UNIQUEMENT si déclaré admis — Ne pas stresser avant</p>
+            <div id="checklist-physical"></div>
+          </div>
+          <div class="card" style="background:rgba(0,200,81,0.06);border-color:rgba(0,200,81,0.2);">
+            <div style="text-align:center;padding:8px 0;">
+              <div style="font-size:36px;margin-bottom:8px;">📊</div>
+              <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--green);" id="dossier-pct">0%</div>
+              <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">Documents préparés</div>
+              <div class="prog-bar" style="max-width:200px;margin:0 auto;">
+                <div class="prog-fill" id="dossier-prog" style="width:0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ MISE AU NET ═══ -->
+    <div class="page" id="page-miseau">
+      <div class="section-title">✍️ Mise au Net</div>
+      <div class="section-sub">Recopie le texte en corrigeant toutes les fautes — Soigne ton écriture</div>
+
+      <div class="tabs">
+        <div class="tab active" onclick="switchMiseauTab('exercice')">Exercices</div>
+        <div class="tab" onclick="switchMiseauTab('regles')">Règles clés</div>
+      </div>
+
+      <div id="miseau-exercice">
+        <div id="miseau-container"></div>
+        <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="checkMiseau()">✅ Voir la correction</button>
+          <button class="btn btn-outline" onclick="nextMiseau()">→ Exercice suivant</button>
+        </div>
+      </div>
+
+      <div id="miseau-regles" style="display:none;">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">📌 Accord du participe passé</div>
+            <div style="font-size:13px;line-height:1.8;color:var(--text);">
+              <div style="margin-bottom:8px;"><span style="color:var(--green);font-weight:600;">Avec AVOIR :</span> Accord avec le COD si placé avant.<br><span style="color:var(--muted);">Ex : Les lettres qu'il a <em>écrites</em>.</span></div>
+              <div><span style="color:var(--green);font-weight:600;">Avec ÊTRE :</span> Accord avec le sujet toujours.<br><span style="color:var(--muted);">Ex : Elles sont <em>arrivées</em>.</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">📌 Pluriel des noms composés</div>
+            <div style="font-size:13px;line-height:1.8;color:var(--text);">
+              <div style="margin-bottom:8px;"><span style="color:var(--gold);font-weight:600;">Nom + Nom :</span> Les deux prennent le pluriel.<br><span style="color:var(--muted);">Ex : des choux-fleurs → des choux-fleurs</span></div>
+              <div><span style="color:var(--gold);font-weight:600;">Verbe + Nom :</span> Seul le nom prend le pluriel.<br><span style="color:var(--muted);">Ex : des porte-clés</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">📌 Conjugaison — Subjonctif présent</div>
+            <div style="font-size:13px;line-height:1.8;color:var(--text);">
+              Il faut que je <span style="color:var(--green);">fasse</span>, que tu <span style="color:var(--green);">ailles</span>, qu'il <span style="color:var(--green);">soit</span>, que nous <span style="color:var(--green);">ayons</span>.<br>
+              <span style="color:var(--muted);">Après : il faut que, bien que, pour que, quoique…</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">📌 Homophones courants</div>
+            <div style="font-size:13px;line-height:1.8;color:var(--text);">
+              <div><span style="color:var(--orange);">a/à</span> · <span style="color:var(--orange);">est/et/es</span> · <span style="color:var(--orange);">ou/où</span></div>
+              <div><span style="color:var(--orange);">ce/se</span> · <span style="color:var(--orange);">ces/ses/c'est/s'est</span></div>
+              <div><span style="color:var(--orange);">mais/mes/met/mets</span></div>
+              <div style="margin-top:6px;color:var(--muted);">Test : remplace par "avait" pour distinguer a/à.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ LOGIQUE ═══ -->
+    <div class="page" id="page-logique">
+      <div class="section-title">🧩 Logique & Suites</div>
+      <div class="section-sub">Tests psychotechniques — Trouve la règle et complète les séries</div>
+
+      <div class="tabs">
+        <div class="tab active" onclick="switchLogiqueTab('suites')">Suites numériques</div>
+        <div class="tab" onclick="switchLogiqueTab('lettres')">Suites de lettres</div>
+        <div class="tab" onclick="switchLogiqueTab('methodes')">Méthodes</div>
+      </div>
+
+      <div id="logique-container"></div>
+    </div>
+
+    <!-- ═══ OPAJ ═══ -->
+    <div class="page" id="page-opaj">
+      <div class="section-title">⚖️ OPAJ — Culture Générale CI</div>
+      <div class="section-sub">Organisation Politique, Administrative et Judiciaire de Côte d'Ivoire</div>
+
+      <div class="tabs">
+        <div class="tab active" onclick="switchOpajTab('qcm')">QCM</div>
+        <div class="tab" onclick="switchOpajTab('fiches')">Fiches de cours</div>
+      </div>
+
+      <div id="opaj-container"></div>
+    </div>
+
+    <!-- ═══ FLASHCARDS ═══ -->
+    <div class="page" id="page-flashcards">
+      <div class="section-title">🃏 Flashcards OPAJ</div>
+      <div class="section-sub">Clique sur la carte pour voir la réponse — Mémorise les institutions clés</div>
+
+      <div style="margin-bottom:20px;display:flex;gap:10px;flex-wrap:wrap;">
+        <div class="tabs" style="margin-bottom:0;">
+          <div class="tab active" onclick="filterFlash('all')">Toutes</div>
+          <div class="tab" onclick="filterFlash('constitution')">Constitution</div>
+          <div class="tab" onclick="filterFlash('institutions')">Institutions</div>
+          <div class="tab" onclick="filterFlash('judiciaire')">Judiciaire</div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="shuffleFlash()">🔀 Mélanger</button>
+      </div>
+
+      <div id="flash-counter" style="font-size:13px;color:var(--muted);margin-bottom:16px;"></div>
+      <div id="flashcard-area" style="max-width:600px;"></div>
+      <div style="display:flex;gap:10px;margin-top:16px;">
+        <button class="btn btn-outline" onclick="prevFlash()">← Précédente</button>
+        <button class="btn btn-primary" onclick="nextFlash()">Suivante →</button>
+      </div>
+    </div>
+
+    <!-- ═══ CHRONOMÈTRE ═══ -->
+    <div class="page" id="page-timer">
+      <div class="section-title">⏱️ Chronomètre d'entraînement</div>
+      <div class="section-sub">Simule les conditions d'examen — Gère ton temps</div>
+
+      <div class="grid-2">
+        <div class="card" style="text-align:center;">
+          <div id="timer-display" style="font-family:'Syne',sans-serif;font-size:72px;font-weight:800;color:var(--green);letter-spacing:-2px;margin:20px 0;">00:00</div>
+          <div id="timer-mode-label" style="font-size:14px;color:var(--muted);margin-bottom:24px;">Prêt</div>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+            <button class="btn btn-primary" id="btn-start" onclick="startTimer()">▶ Démarrer</button>
+            <button class="btn btn-outline" onclick="pauseTimer()">⏸ Pause</button>
+            <button class="btn btn-outline" onclick="resetTimer()">↺ Reset</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">⚙️ Modes prédéfinis</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div class="checklist-item" onclick="setTimerMode(30,'Mise au Net — 30 minutes')" style="cursor:pointer;">
+              <span style="font-size:20px;">✍️</span>
+              <div class="check-label"><strong>Mise au Net</strong><small>30 minutes (durée réelle)</small></div>
+            </div>
+            <div class="checklist-item" onclick="setTimerMode(45,'Logique — 45 minutes')" style="cursor:pointer;">
+              <span style="font-size:20px;">🧩</span>
+              <div class="check-label"><strong>Logique & Psychotechnique</strong><small>45 minutes</small></div>
+            </div>
+            <div class="checklist-item" onclick="setTimerMode(60,'OPAJ — 1 heure')" style="cursor:pointer;">
+              <span style="font-size:20px;">⚖️</span>
+              <div class="check-label"><strong>OPAJ</strong><small>1 heure</small></div>
+            </div>
+            <div class="checklist-item" onclick="setTimerMode(5,'Révision rapide — 5 minutes')" style="cursor:pointer;">
+              <span style="font-size:20px;">⚡</span>
+              <div class="check-label"><strong>Révision rapide</strong><small>5 minutes flash</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STATS ═══ -->
+    <div class="page" id="page-stats">
+      <div class="section-title">📈 Mes Statistiques</div>
+      <div class="section-sub">Suis ta progression globale</div>
+
+      <div class="grid-3" style="margin-bottom:24px;">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:8px;">Mise au Net</div>
+          <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;" id="stats-miseau">0</div>
+          <div style="font-size:12px;color:var(--muted);">exercices corrigés</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--orange);margin-bottom:8px;">Logique</div>
+          <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;" id="stats-logique">0</div>
+          <div style="font-size:12px;color:var(--muted);">suites résolues</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin-bottom:8px;">OPAJ</div>
+          <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;" id="stats-opaj">0/0</div>
+          <div style="font-size:12px;color:var(--muted);">bonnes réponses</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">🗑️ Réinitialiser</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Efface toutes les données de progression de l'application.</p>
+        <button class="btn btn-outline" onclick="resetAll()" style="border-color:var(--orange);color:var(--orange);">🗑️ Tout réinitialiser</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- NOTIFICATION -->
+<div class="notif" id="notif">✅ Sauvegardé !</div>
+
+<script>
+// ═══ STATE ═══
+let state = JSON.parse(localStorage.getItem('concours_state') || '{}');
+const defaults = {
+  checklist: {},
+  miseau_done: 0,
+  miseau_idx: 0,
+  logique_done: 0,
+  logique_idx: 0,
+  opaj_correct: 0,
+  opaj_total: 0,
+  flash_idx: 0,
+};
+state = { ...defaults, ...state };
+
+function save() {
+  localStorage.setItem('concours_state', JSON.stringify(state));
+  updateDashboard();
+}
+
+function notify(msg) {
+  const n = document.getElementById('notif');
+  n.textContent = msg;
+  n.classList.add('show');
+  setTimeout(() => n.classList.remove('show'), 2000);
+}
+
+// ═══ NAV ═══
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelector(`.nav-item[onclick="showPage('${id}')"]`).classList.add('active');
+
+  const titles = {
+    dashboard: 'Tableau de <span>bord</span>',
+    infos: 'Informations & <span>Concours</span>',
+    dossier: 'Mon <span>Dossier</span>',
+    miseau: 'Mise au <span>Net</span>',
+    logique: 'Logique & <span>Suites</span>',
+    opaj: '<span>OPAJ</span> — Culture CI',
+    flashcards: '<span>Flashcards</span> OPAJ',
+    timer: '<span>Chronomètre</span>',
+    stats: 'Mes <span>Stats</span>',
+  };
+  document.getElementById('topbar-title').innerHTML = titles[id] || id;
+  updateDashboard();
+}
+
+// ═══ DOSSIER DATA ═══
+const docsOnline = [
+  { id: 'cni', label: "Pièce d'identité", desc: "CNI, Passeport ou Attestation en cours de validité", tag: 'required' },
+  { id: 'diplome', label: "Diplôme BEPC ou CEPE", desc: "Version scannée — format PDF, JPG ou PNG", tag: 'required' },
+  { id: 'cmu', label: "Carte/Récépissé CMU", desc: "Preuve d'enrôlement à la Couverture Maladie Universelle", tag: 'required' },
+  { id: 'compte', label: "Compte GUCACI créé", desc: "Création du compte candidat sur gucaci.ci", tag: 'required' },
+  { id: 'rdv', label: "Rendez-vous prise de vue", desc: "Photo officielle numérique — à prendre après inscription", tag: 'required' },
+];
+const docsPayment = [
+  { id: 'paiement', label: "Frais payés — 23 500 F CFA", desc: "Paiement Mobile Money dans l'espace candidat GUCACI", tag: 'required' },
+];
+const docsPhysical = [
+  { id: 'naissance', label: "Extrait de naissance", desc: "Original ou copie certifiée conforme", tag: 'admission' },
+  { id: 'nationalite', label: "Certificat de nationalité ivoirienne", desc: "Document officiel", tag: 'admission' },
+  { id: 'casier', label: "Casier judiciaire vierge", desc: "Bulletin n°3 — obtenu au Greffe du Tribunal", tag: 'admission' },
+  { id: 'visite', label: "Certificat de visite médicale", desc: "Délivré par un médecin agréé par l'État", tag: 'admission' },
+  { id: 'photos', label: "Photos d'identité récentes", desc: "4 photos identiques fond blanc ou bleu clair", tag: 'admission' },
+];
+
+function renderChecklist(containerId, items) {
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  c.innerHTML = items.map(item => {
+    const checked = !!state.checklist[item.id];
+    const tagClass = { required: 'tag-required', admission: 'tag-admission', optional: 'tag-optional' }[item.tag] || '';
+    const tagLabel = { required: 'Inscription', admission: 'Si admis', optional: 'Optionnel' }[item.tag] || '';
+    return `<div class="checklist-item ${checked ? 'checked' : ''}" onclick="toggleCheck('${item.id}', this)">
+      <div class="check-box">${checked ? '✓' : ''}</div>
+      <div class="check-label">
+        <strong>${item.label}</strong>
+        <small>${item.desc}</small>
+        <span class="tag ${tagClass}">${tagLabel}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleCheck(id, el) {
+  state.checklist[id] = !state.checklist[id];
+  el.classList.toggle('checked', !!state.checklist[id]);
+  el.querySelector('.check-box').textContent = state.checklist[id] ? '✓' : '';
+  save();
+  updateDossierProgress();
+  if (state.checklist[id]) notify('✅ ' + id + ' coché !');
+}
+
+function updateDossierProgress() {
+  const allItems = [...docsOnline, ...docsPayment, ...docsPhysical];
+  const done = allItems.filter(i => state.checklist[i.id]).length;
+  const pct = Math.round((done / allItems.length) * 100);
+  const pctEl = document.getElementById('dossier-pct');
+  const progEl = document.getElementById('dossier-prog');
+  if (pctEl) pctEl.textContent = pct + '%';
+  if (progEl) progEl.style.width = pct + '%';
+  state.dossier_pct = pct;
+}
+
+// ═══ MISE AU NET DATA ═══
+const miseauExercices = [
+  {
+    texte: "Les adjoint administratif doivent veillés au respect des délaie de traitement des dossier.",
+    corrige: "Les adjoints administratifs doivent veiller au respect des délais de traitement des dossiers.",
+    erreurs: ["adjoint → adjoints (accord pluriel)", "administratif → administratifs (accord pluriel)", "veillés → veiller (infinitif après verbe modal)", "délaie → délais (orthographe)", "dossier → dossiers (accord pluriel)"]
+  },
+  {
+    texte: "Le directeur a demandé a ses employé de préparer les rapport annuels avant la fin du moi.",
+    corrige: "Le directeur a demandé à ses employés de préparer les rapports annuels avant la fin du mois.",
+    erreurs: ["a → à (préposition, pas verbe avoir)", "employé → employés (pluriel)", "rapport → rapports (pluriel)", "moi → mois (orthographe)"]
+  },
+  {
+    texte: "Toute les secrétaire était présente lors de la réunion qui à eu lieu hier matin au bureau du chef.",
+    corrige: "Toutes les secrétaires étaient présentes lors de la réunion qui a eu lieu hier matin au bureau du chef.",
+    erreurs: ["Toute → Toutes (accord féminin pluriel)", "secrétaire → secrétaires (pluriel)", "était → étaient (accord pluriel)", "présente → présentes (accord pluriel)", "à → a (verbe avoir, pas préposition)"]
+  },
+  {
+    texte: "Il faut que vous remettez vos dossier complèt au plus vite, sinon vos candidatures seras rejeté.",
+    corrige: "Il faut que vous remettiez vos dossiers complets au plus vite, sinon vos candidatures seront rejetées.",
+    erreurs: ["remettez → remettiez (subjonctif après 'il faut que')", "dossier → dossiers (pluriel)", "complèt → complets (accord pluriel masculin)", "seras → seront (3e personne pluriel)", "rejeté → rejetées (accord féminin pluriel)"]
+  },
+  {
+    texte: "Les fonctionnaires qui sont arrivés en retards ont été convoqué par leurs supérieur hierachique.",
+    corrige: "Les fonctionnaires qui sont arrivés en retard ont été convoqués par leurs supérieurs hiérarchiques.",
+    erreurs: ["retards → retard (singulier dans cette expression)", "convoqué → convoqués (accord avec le sujet pluriel)", "supérieur → supérieurs (pluriel)", "hierachique → hiérarchiques (orthographe + pluriel)"]
+  },
+  {
+    texte: "Chaque candidat doit fournis une pièces d'identitée valide ainsi que son diplome original.",
+    corrige: "Chaque candidat doit fournir une pièce d'identité valide ainsi que son diplôme original.",
+    erreurs: ["fournis → fournir (infinitif après verbe modal)", "pièces → pièce (singulier après 'une')", "d'identitée → d'identité (orthographe, pas de double 'e')", "diplome → diplôme (accent circonflexe)"]
+  },
+];
+
+let miseauIdx = state.miseau_idx || 0;
+
+function renderMiseau() {
+  const ex = miseauExercices[miseauIdx % miseauExercices.length];
+  document.getElementById('miseau-container').innerHTML = `
+    <div class="quiz-question">
+      <div class="quiz-category">✍️ Exercice ${(miseauIdx % miseauExercices.length) + 1} / ${miseauExercices.length}</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:10px;">Recopie ce texte en corrigeant <strong style="color:var(--orange);">toutes les fautes</strong> :</div>
+      <div class="exercise-text">${ex.texte}</div>
+      <textarea class="exercise-input" id="miseau-input" placeholder="Recopie ici le texte corrigé..."></textarea>
+      <div class="correction-box" id="miseau-correction">
+        <div class="label">✅ Texte corrigé</div>
+        <div class="correct-text">${ex.corrige}</div>
+        <div class="explication"><strong>Fautes corrigées :</strong><br>${ex.erreurs.map(e => '• ' + e).join('<br>')}</div>
+      </div>
+    </div>
+  `;
+}
+
+function checkMiseau() {
+  const box = document.getElementById('miseau-correction');
+  box.classList.add('show');
+  state.miseau_done = (state.miseau_done || 0) + 1;
+  save();
+  notify('Correction affichée !');
+}
+
+function nextMiseau() {
+  miseauIdx++;
+  state.miseau_idx = miseauIdx;
+  document.getElementById('miseau-correction')?.classList.remove('show');
+  renderMiseau();
+  save();
+}
+
+function switchMiseauTab(tab) {
+  document.querySelectorAll('#page-miseau .tab').forEach((t, i) => t.classList.toggle('active', (i === 0 && tab === 'exercice') || (i === 1 && tab === 'regles')));
+  document.getElementById('miseau-exercice').style.display = tab === 'exercice' ? 'block' : 'none';
+  document.getElementById('miseau-regles').style.display = tab === 'regles' ? 'block' : 'none';
+}
+
+// ═══ LOGIQUE DATA ═══
+const logiqueSuites = [
+  { serie: [2, 4, 8, 16, '?'], reponse: '32', regle: '× 2 (chaque terme est multiplié par 2)', type: 'num' },
+  { serie: [3, 7, 15, 31, '?'], reponse: '63', regle: 'n×2 + 1 (terme précédent multiplié par 2, puis +1)', type: 'num' },
+  { serie: [1, 4, 9, 16, '?'], reponse: '25', regle: 'Carrés parfaits : 1², 2², 3², 4², 5²', type: 'num' },
+  { serie: [100, 95, 85, 70, '?'], reponse: '50', regle: '-5, -10, -15, -20 (la soustraction augmente de 5)', type: 'num' },
+  { serie: [5, 10, 20, 40, '?'], reponse: '80', regle: '× 2 (doublement)', type: 'num' },
+  { serie: [1, 1, 2, 3, 5, 8, '?'], reponse: '13', regle: 'Suite de Fibonacci : chaque terme = somme des deux précédents', type: 'num' },
+  { serie: [72, 36, 18, 9, '?'], reponse: '4.5', regle: '÷ 2 (division par 2)', type: 'num' },
+  { serie: [0, 3, 8, 15, 24, '?'], reponse: '35', regle: 'n² - 1 : 0=1-1, 3=4-1, 8=9-1, 15=16-1, 24=25-1, 35=36-1', type: 'num' },
+];
+
+const logiqueLettres = [
+  { serie: ['A', 'C', 'E', 'G', '?'], reponse: 'I', regle: '+2 lettres dans l\'alphabet', type: 'lettre' },
+  { serie: ['Z', 'X', 'V', 'T', '?'], reponse: 'R', regle: '-2 lettres (sens inverse)', type: 'lettre' },
+  { serie: ['A', 'B', 'D', 'G', '?'], reponse: 'K', regle: '+1, +2, +3, +4 (écart croissant)', type: 'lettre' },
+  { serie: ['B', 'D', 'G', 'K', '?'], reponse: 'P', regle: '+2, +3, +4, +5 (écart croissant)', type: 'lettre' },
+];
+
+let logiqueIdx = state.logique_idx || 0;
+let currentLogiqueTab = 'suites';
+let logiqueAnswered = false;
+
+function renderLogique() {
+  const c = document.getElementById('logique-container');
+  if (currentLogiqueTab === 'suites') {
+    const ex = logiqueSuites[logiqueIdx % logiqueSuites.length];
+    c.innerHTML = `
+      <div class="quiz-container">
+        <div class="quiz-question">
+          <div class="quiz-category">🔢 Suite numérique — ${logiqueIdx % logiqueSuites.length + 1}/${logiqueSuites.length}</div>
+          <div style="font-size:14px;color:var(--muted);margin-bottom:16px;">Trouve le terme manquant :</div>
+          <div class="logic-series">
+            ${ex.serie.map(n => n === '?' 
+              ? `<div class="logic-item unknown">?</div>` 
+              : `<div class="logic-item">${n}</div>`).join('<span style="color:var(--muted);font-size:20px;">—</span>')}
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:16px;">
+            <input type="number" class="logic-answer-input" id="logique-input" placeholder="?" onkeydown="if(event.key==='Enter')checkLogique()">
+            <button class="btn btn-primary" onclick="checkLogique()">Vérifier</button>
+            <button class="btn btn-outline btn-sm" onclick="nextLogique()">Passer →</button>
+          </div>
+          <div class="correction-box" id="logique-feedback">
+            <div class="label">📐 Règle</div>
+            <div class="correct-text" id="logique-rule"></div>
+            <div class="explication">Réponse : <strong style="color:var(--green);font-size:16px;" id="logique-ans"></strong></div>
+          </div>
+        </div>
+      </div>`;
+    logiqueAnswered = false;
+  } else if (currentLogiqueTab === 'lettres') {
+    const ex = logiqueLettres[logiqueIdx % logiqueLettres.length];
+    c.innerHTML = `
+      <div class="quiz-container">
+        <div class="quiz-question">
+          <div class="quiz-category">🔤 Suite de lettres — ${logiqueIdx % logiqueLettres.length + 1}/${logiqueLettres.length}</div>
+          <div style="font-size:14px;color:var(--muted);margin-bottom:16px;">Trouve la lettre manquante :</div>
+          <div class="logic-series">
+            ${ex.serie.map(n => n === '?' 
+              ? `<div class="logic-item unknown">?</div>` 
+              : `<div class="logic-item">${n}</div>`).join('<span style="color:var(--muted);font-size:20px;">—</span>')}
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:16px;">
+            <input type="text" maxlength="1" style="text-transform:uppercase;" class="logic-answer-input" id="logique-input" placeholder="?" onkeydown="if(event.key==='Enter')checkLogique()">
+            <button class="btn btn-primary" onclick="checkLogique()">Vérifier</button>
+            <button class="btn btn-outline btn-sm" onclick="nextLogique()">Passer →</button>
+          </div>
+          <div class="correction-box" id="logique-feedback">
+            <div class="label">📐 Règle</div>
+            <div class="correct-text" id="logique-rule"></div>
+            <div class="explication">Réponse : <strong style="color:var(--green);font-size:16px;" id="logique-ans"></strong></div>
+          </div>
+        </div>
+      </div>`;
+  } else {
+    c.innerHTML = `
+      <div class="grid-2">
+        <div class="card"><div class="card-header">📐 Méthodes essentielles</div>
+          <div style="display:flex;flex-direction:column;gap:12px;font-size:13px;line-height:1.7;">
+            <div style="padding:12px;background:var(--card2);border-radius:8px;border-left:3px solid var(--green);">
+              <strong style="color:var(--green);">1. Addition constante</strong><br>
+              Soustraire deux termes consécutifs → même différence<br>
+              <span style="color:var(--muted);">Ex: 3, 7, 11, 15 → +4 à chaque fois</span>
+            </div>
+            <div style="padding:12px;background:var(--card2);border-radius:8px;border-left:3px solid var(--orange);">
+              <strong style="color:var(--orange);">2. Multiplication</strong><br>
+              Diviser chaque terme par le précédent → même ratio<br>
+              <span style="color:var(--muted);">Ex: 2, 6, 18, 54 → ×3</span>
+            </div>
+            <div style="padding:12px;background:var(--card2);border-radius:8px;border-left:3px solid var(--gold);">
+              <strong style="color:var(--gold);">3. Écart croissant</strong><br>
+              Les différences augmentent régulièrement<br>
+              <span style="color:var(--muted);">Ex: 1, 2, 4, 7, 11 → +1, +2, +3, +4</span>
+            </div>
+            <div style="padding:12px;background:var(--card2);border-radius:8px;border-left:3px solid #a78bfa;">
+              <strong style="color:#a78bfa;">4. Carrés / Cubes</strong><br>
+              Reconnaître 1, 4, 9, 16, 25, 36, 49, 64…<br>
+              <span style="color:var(--muted);">Mémorise les 12 premiers carrés et cubes !</span>
+            </div>
+          </div>
+        </div>
+        <div class="card"><div class="card-header">⚡ Astuce rapide</div>
+          <div style="font-size:13px;line-height:1.8;">
+            <p style="margin-bottom:12px;color:var(--muted);">Face à une série inconnue, applique ce protocole :</p>
+            <div style="counter-reset:steps;">
+              ${['Calcule les différences entre termes consécutifs', 'Si les différences sont constantes → suite arithmétique', 'Calcule les ratios (terme ÷ précédent)', 'Si les ratios sont constants → suite géométrique', 'Si rien → recalcule les différences des différences (2e ordre)', 'En dernier recours : cherche des carrés ou Fibonacci'].map((s,i) => 
+              `<div style="padding:8px 12px;margin-bottom:6px;background:var(--card2);border-radius:6px;">
+                <span style="color:var(--green);font-weight:700;margin-right:8px;">${i+1}.</span>${s}
+              </div>`).join('')}
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }
+}
+
+function switchLogiqueTab(tab) {
+  currentLogiqueTab = tab;
+  logiqueIdx = 0;
+  document.querySelectorAll('#page-logique .tab').forEach((t, i) => {
+    t.classList.toggle('active', ['suites','lettres','methodes'][i] === tab);
+  });
+  renderLogique();
+}
+
+function checkLogique() {
+  const input = document.getElementById('logique-input');
+  if (!input) return;
+  const val = input.value.trim().toUpperCase();
+  const sources = currentLogiqueTab === 'suites' ? logiqueSuites : logiqueLettres;
+  const ex = sources[logiqueIdx % sources.length];
+  const fb = document.getElementById('logique-feedback');
+  const ruleEl = document.getElementById('logique-rule');
+  const ansEl = document.getElementById('logique-ans');
+  fb.classList.add('show');
+  if (ruleEl) ruleEl.textContent = ex.regle;
+  if (ansEl) ansEl.textContent = ex.reponse;
+  const correct = val === ex.reponse.toString().toUpperCase();
+  if (correct) {
+    notify('🎉 Bravo ! Bonne réponse !');
+    input.style.borderColor = 'var(--green)';
+  } else {
+    notify('❌ Pas tout à fait...');
+    input.style.borderColor = 'var(--orange)';
+  }
+  state.logique_done = (state.logique_done || 0) + 1;
+  save();
+}
+
+function nextLogique() {
+  logiqueIdx++;
+  state.logique_idx = logiqueIdx;
+  save();
+  renderLogique();
+}
+
+// ═══ OPAJ DATA ═══
+const opajQuestions = [
+  { q: "Quelle institution contrôle la régularité des élections en Côte d'Ivoire ?", options: ["La Cour Suprême", "Le Conseil Constitutionnel", "Le Sénat", "La Commission Électorale"], answer: 1, explication: "Le Conseil Constitutionnel est l'institution compétente pour contrôler la régularité des élections présidentielles, législatives et des opérations de référendum." },
+  { q: "Combien de Chambres compose le Parlement ivoirien ?", options: ["Une seule Chambre", "Deux Chambres", "Trois Chambres", "Aucune chambre formelle"], answer: 1, explication: "Le Parlement de Côte d'Ivoire est bicaméral : l'Assemblée Nationale (chambre basse) et le Sénat (chambre haute), conformément à la Constitution de 2016." },
+  { q: "Qui promulgue les lois en Côte d'Ivoire ?", options: ["Le Premier Ministre", "Le Président de l'Assemblée Nationale", "Le Président de la République", "Le Garde des Sceaux"], answer: 2, explication: "La promulgation des lois est une prérogative exclusive du Président de la République, qui dispose d'un délai de 15 jours après la transmission par le Parlement." },
+  { q: "Quelle est la plus haute juridiction administrative en Côte d'Ivoire ?", options: ["La Cour d'Appel", "Le Tribunal Administratif", "Le Conseil d'État", "La Cour Suprême"], answer: 2, explication: "Le Conseil d'État est la plus haute juridiction de l'ordre administratif. Il statue sur les litiges mettant en cause l'État et les personnes morales de droit public." },
+  { q: "Quelle institution est garante des droits fondamentaux et des libertés publiques ?", options: ["La Cour Suprême", "Le Conseil Constitutionnel", "Le Médiateur de la République", "Le Sénat"], answer: 1, explication: "Le Conseil Constitutionnel est garant des droits fondamentaux. Il peut être saisi par les citoyens pour violation des droits fondamentaux." },
+  { q: "Quel est le rôle de la Cour des Comptes en Côte d'Ivoire ?", options: ["Juger les crimes", "Contrôler les finances publiques", "Élire le Président", "Voter le budget"], answer: 1, explication: "La Cour des Comptes contrôle et juge les comptes des comptables publics et s'assure de la régularité de l'exécution du budget de l'État." },
+  { q: "Sous quel régime politique fonctionne la Côte d'Ivoire ?", options: ["Régime parlementaire", "Régime présidentiel", "Régime semi-présidentiel", "Monarchie constitutionnelle"], answer: 2, explication: "La Côte d'Ivoire est une République à régime présidentiel. Le Président de la République détient le pouvoir exécutif et est le chef de l'État et du gouvernement." },
+  { q: "Combien de membres compose le Conseil Constitutionnel ?", options: ["5 membres", "7 membres", "9 membres", "11 membres"], answer: 2, explication: "Le Conseil Constitutionnel est composé de 9 membres dont le mandat est de 6 ans non renouvelable. 3 sont nommés par le Président de la République, 3 par l'Assemblée Nationale et 3 par le Sénat." },
+  { q: "Quel est le découpage administratif de base en Côte d'Ivoire (du plus grand au plus petit) ?", options: ["Région → Département → Commune", "District → Région → Département → Sous-Préfecture → Village", "Département → Région → Sous-Préfecture", "Province → Canton → Village"], answer: 1, explication: "Le découpage administratif de la CI est : District autonome → Région → Département → Sous-Préfecture → Village. Il existe 2 districts autonomes (Abidjan et Yamoussoukro)." },
+  { q: "Qui est le chef du gouvernement en Côte d'Ivoire ?", options: ["Le Premier Ministre", "Le Président de l'Assemblée Nationale", "Le Président de la République", "Le Ministre d'État"], answer: 2, explication: "Selon la Constitution de 2016, le Président de la République est à la fois chef de l'État ET chef du gouvernement. Le poste de Premier Ministre est facultatif." },
+  { q: "Quelle est la durée du mandat présidentiel en Côte d'Ivoire ?", options: ["4 ans, renouvelable 2 fois", "5 ans, renouvelable 1 fois", "6 ans, non renouvelable", "7 ans, renouvelable 1 fois"], answer: 1, explication: "Le Président de la République est élu pour un mandat de 5 ans, renouvelable une seule fois. Il est élu au suffrage universel direct." },
+  { q: "Quelle juridiction juge les crimes les plus graves en Côte d'Ivoire ?", options: ["Le Tribunal Correctionnel", "La Cour d'Appel", "La Cour d'Assises", "Le Conseil d'État"], answer: 2, explication: "La Cour d'Assises est compétente pour juger les crimes (infractions les plus graves punies de réclusion criminelle). Elle siège à Abidjan et se déplace dans les chefs-lieux de région." },
+];
+
+let opajIdx = 0;
+let opajAnswered = false;
+let currentOpajTab = 'qcm';
+let opajSessionCorrect = 0;
+let opajSessionTotal = 0;
+
+function renderOpaj() {
+  const c = document.getElementById('opaj-container');
+  if (currentOpajTab === 'qcm') {
+    const q = opajQuestions[opajIdx % opajQuestions.length];
+    const num = opajIdx % opajQuestions.length;
+    c.innerHTML = `
+      <div class="quiz-container">
+        <div class="q-counter">
+          <span style="font-size:13px;color:var(--muted);">Question ${num + 1} / ${opajQuestions.length}</span>
+          <div style="font-size:13px;color:var(--gold);">Score : ${state.opaj_correct || 0} / ${state.opaj_total || 0}</div>
+        </div>
+        <div class="quiz-question">
+          <div class="quiz-category">⚖️ OPAJ — Côte d'Ivoire</div>
+          <div class="quiz-q-text">${q.q}</div>
+          <div class="quiz-options" id="opaj-options">
+            ${q.options.map((opt, i) => `
+              <div class="quiz-option" onclick="answerOpaj(${i})" tabindex="0">
+                <div class="option-letter">${['A','B','C','D'][i]}</div>
+                <span>${opt}</span>
+              </div>`).join('')}
+          </div>
+          <div class="quiz-feedback" id="opaj-feedback"></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:8px;">
+          <button class="btn btn-outline" onclick="opajPrev()">← Précédente</button>
+          <button class="btn btn-primary" onclick="nextOpaj()">Question suivante →</button>
+        </div>
+      </div>`;
+    opajAnswered = false;
+  } else {
+    c.innerHTML = `
+      <div class="grid-2">
+        ${opajFiches.map(f => `
+          <div class="card">
+            <div class="card-header">${f.icon} ${f.titre}</div>
+            <div style="font-size:13px;line-height:1.8;color:var(--text);">${f.contenu}</div>
+          </div>`).join('')}
+      </div>`;
+  }
+}
+
+const opajFiches = [
+  { icon: '🏛️', titre: 'Les 3 pouvoirs', contenu: '<strong style="color:var(--green);">Exécutif :</strong> Président de la République — dirige le gouvernement, promulgue les lois.<br><strong style="color:var(--gold);">Législatif :</strong> Assemblée Nationale + Sénat — votent les lois.<br><strong style="color:var(--orange);">Judiciaire :</strong> Cours et Tribunaux — appliquent la loi, rendent justice.' },
+  { icon: '📜', titre: 'La Constitution de 2016', contenu: 'La Constitution de Côte d\'Ivoire a été adoptée par référendum le <strong>30 octobre 2016</strong>. Elle instaure un régime présidentiel et crée le Sénat. Elle garantit les droits fondamentaux des citoyens.' },
+  { icon: '⚖️', titre: 'Ordre judiciaire', contenu: '<strong>1er degré :</strong> Tribunaux de 1ère instance<br><strong>2e degré :</strong> Cours d\'Appel<br><strong>3e degré :</strong> Cour de Cassation (chambre civile, pénale...)<br><strong>Cour d\'Assises :</strong> Crimes graves' },
+  { icon: '🗺️', titre: 'Découpage administratif', contenu: 'CI = <strong>14 Districts + Villes autonomes</strong><br>→ 31 Régions<br>→ 108 Départements<br>→ Sous-Préfectures<br>→ Communes et Villages<br><strong>2 Districts autonomes :</strong> Abidjan & Yamoussoukro' },
+  { icon: '👥', titre: 'Institutions clés', contenu: '<strong>Conseil Constitutionnel :</strong> 9 membres — 6 ans NR<br><strong>Cour Suprême :</strong> 4 chambres (judiciaire, administrative, comptes, cassation)<br><strong>CENA / CEI :</strong> Organisation des élections<br><strong>HACA :</strong> Régulation audiovisuelle' },
+  { icon: '🌍', titre: 'Côte d\'Ivoire — Repères', contenu: `<strong>Capitale politique :</strong> Yamoussoukro<br><strong>Capital économique :</strong> Abidjan<br><strong>Devise :</strong> Union — Discipline — Travail<br><strong>Hymne :</strong> L'Abidjanaise<br><strong>Monnaie :</strong> Franc CFA (FCFA)` },
+];
+
+function answerOpaj(idx) {
+  if (opajAnswered) return;
+  opajAnswered = true;
+  const q = opajQuestions[opajIdx % opajQuestions.length];
+  const opts = document.querySelectorAll('#opaj-options .quiz-option');
+  opts.forEach(o => o.classList.add('disabled'));
+  opts[q.answer].classList.add('correct');
+  const fb = document.getElementById('opaj-feedback');
+  state.opaj_total = (state.opaj_total || 0) + 1;
+  if (idx === q.answer) {
+    opts[idx].classList.add('correct');
+    fb.textContent = '✅ ' + q.explication;
+    fb.className = 'quiz-feedback show success';
+    state.opaj_correct = (state.opaj_correct || 0) + 1;
+    notify('🎉 Excellent !');
+  } else {
+    opts[idx].classList.add('wrong');
+    fb.textContent = '❌ ' + q.explication;
+    fb.className = 'quiz-feedback show error';
+    notify('❌ Pas tout à fait...');
+  }
+  save();
+}
+
+function nextOpaj() { opajIdx++; renderOpaj(); }
+function opajPrev() { if (opajIdx > 0) { opajIdx--; renderOpaj(); } }
+
+function switchOpajTab(tab) {
+  currentOpajTab = tab;
+  document.querySelectorAll('#page-opaj .tab').forEach((t, i) => {
+    t.classList.toggle('active', ['qcm','fiches'][i] === tab);
+  });
+  renderOpaj();
+}
+
+// ═══ FLASHCARDS DATA ═══
+const flashcards = [
+  { cat: 'constitution', question: "Quand la Constitution actuelle de CI a-t-elle été adoptée ?", reponse: "30 octobre 2016 — par référendum populaire" },
+  { cat: 'institutions', question: "Combien de membres compose le Conseil Constitutionnel ?", reponse: "9 membres — mandat de 6 ans non renouvelable (3 nommés par chaque : Président, AN, Sénat)" },
+  { cat: 'institutions', question: "Quelles sont les 2 chambres du Parlement ivoirien ?", reponse: "L'Assemblée Nationale (chambre basse) + Le Sénat (chambre haute)" },
+  { cat: 'judiciaire', question: "Quelle juridiction juge les affaires administratives en appel ?", reponse: "Le Conseil d'État — plus haute juridiction administrative" },
+  { cat: 'judiciaire', question: "Quelle juridiction juge les crimes les plus graves ?", reponse: "La Cour d'Assises — infractions punies de réclusion criminelle" },
+  { cat: 'constitution', question: "Quelle est la devise de la Côte d'Ivoire ?", reponse: "Union — Discipline — Travail" },
+  { cat: 'institutions', question: "Qui est garant de l'indépendance de la justice ?", reponse: "Le Président de la République — via le Conseil Supérieur de la Magistrature (CSM)" },
+  { cat: 'judiciaire', question: "Que contrôle la Cour des Comptes ?", reponse: "La régularité des finances publiques et l'exécution du budget de l'État" },
+  { cat: 'constitution', question: "Quelles sont les 2 villes à statut de district autonome ?", reponse: "Abidjan (capitale économique) + Yamoussoukro (capitale politique)" },
+  { cat: 'institutions', question: "Quel organe régule l'audiovisuel en CI ?", reponse: "La HACA — Haute Autorité de la Communication Audiovisuelle" },
+  { cat: 'constitution', question: "Quelle est la durée du mandat présidentiel en CI ?", reponse: "5 ans, renouvelable une seule fois (max 2 mandats)" },
+  { cat: 'judiciaire', question: "En combien d'ordres se divise le système judiciaire ivoirien ?", reponse: "2 ordres : Judiciaire (personnes privées) + Administratif (État/personnes publiques)" },
+];
+
+let flashFilter = 'all';
+let flashFiltered = [...flashcards];
+let flashIdx = state.flash_idx || 0;
+let flashFlipped = false;
+
+function filterFlash(cat) {
+  flashFilter = cat;
+  flashFiltered = cat === 'all' ? [...flashcards] : flashcards.filter(f => f.cat === cat);
+  flashIdx = 0;
+  flashFlipped = false;
+  document.querySelectorAll('#page-flashcards .tab').forEach((t, i) => {
+    t.classList.toggle('active', ['all','constitution','institutions','judiciaire'][i] === cat);
+  });
+  renderFlash();
+}
+
+function shuffleFlash() {
+  for (let i = flashFiltered.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [flashFiltered[i], flashFiltered[j]] = [flashFiltered[j], flashFiltered[i]];
+  }
+  flashIdx = 0; flashFlipped = false;
+  renderFlash();
+  notify('🔀 Cartes mélangées !');
+}
+
+function renderFlash() {
+  const f = flashFiltered[flashIdx % flashFiltered.length];
+  document.getElementById('flash-counter').textContent = `Carte ${(flashIdx % flashFiltered.length) + 1} / ${flashFiltered.length}`;
+  const catLabel = { constitution: '🏛️ Constitution', institutions: '👥 Institutions', judiciaire: '⚖️ Judiciaire' }[f.cat] || '';
+  document.getElementById('flashcard-area').innerHTML = `
+    <div class="flashcard-wrap">
+      <div class="flashcard ${flashFlipped ? 'flipped' : ''}" onclick="flipFlash()">
+        <div class="flashcard-face">
+          <div class="card-type">${catLabel} — Clique pour révéler</div>
+          <div class="card-content">${f.question}</div>
+        </div>
+        <div class="flashcard-face flashcard-back">
+          <div class="card-type">✅ Réponse</div>
+          <div class="card-content">${f.reponse}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function flipFlash() { flashFlipped = !flashFlipped; renderFlash(); }
+function nextFlash() { flashIdx++; flashFlipped = false; state.flash_idx = flashIdx; save(); renderFlash(); }
+function prevFlash() { if (flashIdx > 0) { flashIdx--; flashFlipped = false; renderFlash(); } }
+
+// ═══ TIMER ═══
+let timerSeconds = 0;
+let timerRunning = false;
+let timerInterval = null;
+let timerMax = 0;
+
+function setTimerMode(minutes, label) {
+  resetTimer();
+  timerMax = minutes * 60;
+  timerSeconds = timerMax;
+  document.getElementById('timer-mode-label').textContent = label;
+  updateTimerDisplay();
+  notify('⏱️ ' + label + ' configuré');
+}
+
+function startTimer() {
+  if (timerRunning) return;
+  timerRunning = true;
+  if (timerMax > 0 && timerSeconds === 0) timerSeconds = timerMax;
+  if (timerMax === 0) timerInterval = setInterval(() => { timerSeconds++; updateTimerDisplay(); }, 1000);
+  else timerInterval = setInterval(() => {
+    if (timerSeconds > 0) { timerSeconds--; updateTimerDisplay(); }
+    else { clearInterval(timerInterval); timerRunning = false; notify('⏰ Temps écoulé !'); }
+  }, 1000);
+}
+
+function pauseTimer() {
+  clearInterval(timerInterval); timerRunning = false;
+}
+
+function resetTimer() {
+  clearInterval(timerInterval); timerRunning = false;
+  timerSeconds = timerMax;
+  updateTimerDisplay();
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+  const s = (timerSeconds % 60).toString().padStart(2, '0');
+  document.getElementById('timer-display').textContent = `${m}:${s}`;
+  if (timerMax > 0) {
+    const ratio = timerSeconds / timerMax;
+    const color = ratio > 0.5 ? 'var(--green)' : ratio > 0.2 ? 'var(--gold)' : 'var(--orange)';
+    document.getElementById('timer-display').style.color = color;
+  }
+}
+
+// ═══ DASHBOARD ═══
+function updateDashboard() {
+  const days = Math.ceil((new Date('2026-04-30') - new Date()) / 86400000);
+  const el = document.getElementById('stat-days');
+  if (el) el.textContent = days > 0 ? days : '⚠️ 0';
+
+  const exEl = document.getElementById('stat-ex');
+  const total = (state.miseau_done || 0) + (state.logique_done || 0) + (state.opaj_total || 0);
+  if (exEl) exEl.textContent = total;
+
+  const correctEl = document.getElementById('stat-correct');
+  const rate = state.opaj_total > 0 ? Math.round((state.opaj_correct / state.opaj_total) * 100) : 0;
+  if (correctEl) correctEl.textContent = rate + '%';
+
+  const dossierEl = document.getElementById('stat-dossier');
+  const allDocs = [...docsOnline, ...docsPayment, ...docsPhysical];
+  const doneDocs = allDocs.filter(d => state.checklist[d.id]).length;
+  const dossierPct = Math.round((doneDocs / allDocs.length) * 100);
+  if (dossierEl) dossierEl.textContent = dossierPct + '%';
+
+  // Progression bars
+  const mMax = miseauExercices.length;
+  const mDone = Math.min(state.miseau_done || 0, mMax);
+  const mPct = Math.round((mDone / mMax) * 100);
+  const pm = document.getElementById('prog-miseau');
+  const pmt = document.getElementById('prog-miseau-text');
+  if (pm) pm.style.width = mPct + '%';
+  if (pmt) pmt.textContent = mDone + ' exercices';
+
+  const lMax = logiqueSuites.length + logiqueLettres.length;
+  const lDone = Math.min(state.logique_done || 0, lMax);
+  const lPct = Math.round((lDone / lMax) * 100);
+  const pl = document.getElementById('prog-logique');
+  const plt = document.getElementById('prog-logique-text');
+  if (pl) pl.style.width = lPct + '%';
+  if (plt) plt.textContent = lDone + ' suites';
+
+  const oPct = state.opaj_total > 0 ? Math.round(((state.opaj_correct || 0) / state.opaj_total) * 100) : 0;
+  const po = document.getElementById('prog-opaj');
+  const pot = document.getElementById('prog-opaj-text');
+  if (po) po.style.width = oPct + '%';
+  if (pot) pot.textContent = (state.opaj_correct || 0) + '/' + (state.opaj_total || 0) + ' correct';
+
+  // Global progress
+  const gp = document.getElementById('global-progress-text');
+  const global = Math.round((mPct + lPct + oPct + dossierPct) / 4);
+  if (gp) gp.textContent = `Progression : ${global}%`;
+
+  // Stats page
+  const sm = document.getElementById('stats-miseau');
+  if (sm) sm.textContent = state.miseau_done || 0;
+  const sl = document.getElementById('stats-logique');
+  if (sl) sl.textContent = state.logique_done || 0;
+  const so = document.getElementById('stats-opaj');
+  if (so) so.textContent = `${state.opaj_correct || 0}/${state.opaj_total || 0}`;
+}
+
+function resetAll() {
+  if (confirm('Effacer toutes les données de progression ?')) {
+    localStorage.removeItem('concours_state');
+    location.reload();
+  }
+}
+
+// ═══ INIT ═══
+renderChecklist('checklist-online', docsOnline);
+renderChecklist('checklist-payment', docsPayment);
+renderChecklist('checklist-physical', docsPhysical);
+renderMiseau();
+renderLogique();
+renderOpaj();
+renderFlash();
+updateDashboard();
+updateDossierProgress();
+updateTimerDisplay();
+</script>
+</body>
+</html>
